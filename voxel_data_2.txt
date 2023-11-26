@@ -1,0 +1,10 @@
+NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, PV 8.0, PV 8.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, PV 8.0, PV 8.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, OA 1.0, OA 1.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, OA 1.0, OA 1.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, PV 8.0, PV 8.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, PV 8.0, PV 8.0, PV 8.0, PV 8.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0
+NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0, NT 2.0
