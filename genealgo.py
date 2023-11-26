@@ -3,6 +3,7 @@ from beams import Beam, BeamSet
 import math
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 
 def calculate_beam_path(target, angle, width, height):
     path = set()
@@ -75,32 +76,26 @@ def initialise(voxel_matrix, n_init_beams=10, n_init_sets=50):
 def exponential_ranking_selection(beam_sets, scores, c=0.99):
     if not 0 < c < 1:
         raise ValueError("c must be between 0 and 1")
-
-    # Rank the beam_sets based on scores (lower score is better)
     ranked_indices = np.argsort(scores).tolist()
-    
-    # Calculate the total number of beam_sets
     N = len(beam_sets)
-
-    # Calculate selection probabilities using exponential ranking
     probabilities = [(1 - c) / (1 - c**N) * c**i for i in range(N)]
-
-    # Rearrange probabilities to correspond to the original order of beam_sets
     probabilities = [probabilities[ranked_indices.index(i)] for i in range(N)]
-
-    # Sample beam_sets based on these probabilities
     sampled_indices = np.random.choice(N, size=N, p=probabilities)
     sampled_beam_sets = [beam_sets[i] for i in sampled_indices]
 
     return sampled_beam_sets
 
-def select(voxel_matrix, population, intensity, weights):
+def evaluate_scores(voxel_matrix, population, intensity, weights):
     scores = []
     for beam_set in population:
         score = calculate_score(voxel_matrix, beam_set, intensity, weights)
         scores.append(score)
-    print(np.average(scores))
+        
+    return scores
+
+def select(population, scores):
     sampled = exponential_ranking_selection(population, scores)
+
     return sampled
  
 def mutation(population, noise_std_angle, noise_std_target, prob, voxel_matrix):
@@ -110,6 +105,7 @@ def mutation(population, noise_std_angle, noise_std_target, prob, voxel_matrix):
                 beam.mutate_angle(noise_std_angle)
             if random.random() < prob:
                 beam.mutate_target(noise_std_target, voxel_matrix)
+
     return population
 
 def crossover(population):
@@ -129,30 +125,34 @@ def crossover(population):
             new_population.append(BeamSet(new_beam_set_2))
         else:
             new_population.append(population[i].beams)
+
     return new_population    
 
-def gene_algo(voxel_matrix, n_generations, intensity, weights):
+def plot_avg_scores(avg_scores):
+    # Assuming avg_scores is a list of average scores
+    plt.plot(avg_scores)
+    plt.xlabel('Generation')
+    plt.ylabel('Average score')
+    plt.title('Average scores across generations')
+    plt.grid(True)
+    plt.show()
+
+def gene_algo(voxel_matrix, n_generations, intensity, weights, noise_std_angle = 5, noise_std_target = 2, mutate_prob = 0.05):
     population = initialise(voxel_matrix)
+    scores_history = []
     for i in range(n_generations):
-        population = select(voxel_matrix, population, intensity, weights)
+        scores = evaluate_scores(voxel_matrix, population, intensity, weights)
+        avg_score = np.average(scores)
+        print(f'Gen #%d/%d' % (i, n_generations), avg_score)
+        scores_history.append(avg_score)
+        population = select(population, scores)
         population = crossover(population)
-        population = mutation(population, 4, 4, 0.05, voxel_matrix)
+        population = mutation(population, noise_std_angle, noise_std_target, mutate_prob, voxel_matrix)
+
+    plot_avg_scores(scores_history)
     return population
 
-# Example usage
 voxel_matrix = VoxelMatrix()
 voxel_matrix.read_from_file('voxel_data_2.txt')
-# beam_set = BeamSet()
-# beam_set.add_beam((5, 5), 45)
-# beam_set.add_beam((7, 2), 135)
 
-
-# intensity_matrix = aim_beams_at_voxelmatrix(beam_set, voxel_matrix, 1)
-
-# for row in intensity_matrix:
-#     print(" ".join(map(str, row)))
-
-# score = calculate_score(voxel_matrix, beam_set, 1, {'OA': 1, 'PV': 1, 'NT': 1})
-# print(score)
-
-population = gene_algo(voxel_matrix, 20, 1, {'OA': 1, 'PV': 1, 'NT': 1})
+population = gene_algo(voxel_matrix, 50, 1, {'OA': 1, 'PV': 1, 'NT': 1}, 5, 4, 0.1)
